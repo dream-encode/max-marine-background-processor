@@ -1,7 +1,7 @@
 {
-    "name": "GH_REPO_URL",
+    "name": "dream-encode/max-marine-background-processor",
 	"description": "A reusable, abstracted plugin that provides a fraework for processing background tasks.",
-	"homepage": "https://github.com/GH_REPO_URL",
+	"homepage": "https://github.com/dream-encode/max-marine-background-processor",
     "license": "proprietary",
 	"authors": [
 		{

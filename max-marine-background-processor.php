@@ -22,7 +22,7 @@
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       max-marine-background-processor
  * Domain Path:       /languages
- * GitHub Plugin URI: https://github.com/GH_REPO_URL
+ * GitHub Plugin URI: https://github.com/dream-encode/max-marine-background-processor
  * Primary Branch:    main
  * Release Asset:     true
  */
