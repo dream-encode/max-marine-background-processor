@@ -1,0 +1,27 @@
+parameters:
+    level: 8
+    treatPhpDocTypesAsCertain: false
+    checkMissingIterableValueType: false
+    checkUninitializedProperties: false
+    tmpDir: tests
+    paths:
+        - max-marine-background-processor.php
+        - includes
+        - admin
+        - public
+    scanFiles:
+        - includes/max-marine-background-processor-constants.php
+    scanDirectories:
+        - includes
+    excludePaths:
+        - node_modules/*
+    bootstrapFiles:
+        - includes/max-marine-background-processor-constants.php
+        - %rootDir%/../../php-stubs/wordpress-stubs/wordpress-stubs.php
+        - %rootDir%/../../php-stubs/woocommerce-stubs/woocommerce-stubs.php
+        - %rootDir%/../../php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
+    ignoreErrors:
+        -
+            message: '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
+            paths:
+                - admin/partials/*
