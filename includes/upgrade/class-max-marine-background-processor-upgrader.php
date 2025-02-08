@@ -396,7 +396,57 @@ class Max_Marine_Background_Processor_Upgrader {
 		 */
 		$max_index_length = 191;
 
-		$tables = '';
+		$tables = "CREATE TABLE {$wpdb->prefix}mmbp_background_processes (
+				id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				parent_background_processes_id INT UNSIGNED DEFAULT NULL,
+				processor VARCHAR(255) NOT NULL,
+				status ENUM('pending','queued','processing','failed','cancelled','complete') NOT NULL DEFAULT 'queued',
+				user_id INT UNSIGNED DEFAULT NULL,
+				datetime_queued DATETIME DEFAULT NULL,
+				datetime_started DATETIME DEFAULT NULL,
+				datetime_completed DATETIME DEFAULT NULL,
+				datetime_cancelled DATETIME DEFAULT NULL,
+				total_processing_time DECIMAL(8,2) DEFAULT '0.00',
+				total_rows INT UNSIGNED DEFAULT '0',
+				total_rows_skipped INT UNSIGNED DEFAULT '0',
+				total_rows_processed INT UNSIGNED DEFAULT '0',
+				total_rows_failed INT UNSIGNED DEFAULT '0',
+				PRIMARY KEY  (id),
+				KEY parent_background_processes_id (parent_background_processes_id),
+				KEY processor (processor),
+				KEY status (status),
+				KEY user_id (user_id)
+			) $charset_collate;
+			CREATE TABLE {$wpdb->prefix}mmbp_background_processes_messages (
+				id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				user_id INT UNSIGNED DEFAULT NULL,
+				background_processes_id INT UNSIGNED NOT NULL,
+				background_processes_run_id INT UNSIGNED DEFAULT NULL,
+				type ENUM('info','success','warning','error') NOT NULL DEFAULT 'info',
+				message TEXT NOT NULL,
+				dismissed TINYINT(1) UNSIGNED NOT NULL DEFAULT '0',
+				datetime_added DATETIME NOT NULL,
+				datetime_dismissed DATETIME DEFAULT NULL,
+				PRIMARY KEY  (id),
+				KEY user_id (user_id),
+				KEY background_processes_id (background_processes_id),
+				KEY dismissed (dismissed)
+			) $charset_collate;
+			CREATE TABLE {$wpdb->prefix}mmbp_background_processes_runs (
+				id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+				background_processes_id INT UNSIGNED NOT NULL,
+				as_action_id INT UNSIGNED DEFAULT NULL,
+				status ENUM('pending','queued','processing','failed','cancelled','complete') NOT NULL DEFAULT 'queued',
+				datetime_queued DATETIME NOT NULL,
+				datetime_started DATETIME DEFAULT NULL,
+				datetime_completed DATETIME DEFAULT NULL,
+				datetime_last_attempt DATETIME DEFAULT NULL,
+				attempts TINYINT UNSIGNED NOT NULL DEFAULT '0',
+				PRIMARY KEY  (id),
+				KEY background_processes_id (background_processes_id),
+				KEY as_action_id (as_action_id),
+				KEY status (status)
+			) $charset_collate;";
 
 		return $tables;
 	}
@@ -412,7 +462,11 @@ class Max_Marine_Background_Processor_Upgrader {
 	public static function get_tables() {
 		global $wpdb;
 
-		$table_names = array();
+		$table_names = array(
+			'mmbp_background_processes',
+			'mmbp_background_processes_messages',
+			'mmbp_background_processes_runs',
+		);
 
 		$tables = array();
 

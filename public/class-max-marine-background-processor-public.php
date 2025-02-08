@@ -78,18 +78,6 @@ class Max_Marine_Background_Processor_Public {
 	}
 
 	/**
-	 * Example function.
-	 *
-	 * @since  1.0.0
-	 * @access public
-	 * @param  string  $param  First function parameter.
-	 * @return string
-	 */
-	public function example_function( $param ) {
-		return $param;
-	}
-
-	/**
 	 * Register plugin settings.
 	 *
 	 * @since  1.0.0
@@ -98,13 +86,21 @@ class Max_Marine_Background_Processor_Public {
 	 */
 	public function register_plugin_settings() {
 		$default = array(
-			'plugin_log_level' => 'off',
+			'plugin_log_level'                                               => 'off',
+			'background_process_action_scheduler_queue_mode'                 => 'scheduled',
+			'background_process_action_scheduler_queue_mode_scheduled_delay' => '5',
 		);
 
 		$schema  = array(
 			'type'       => 'object',
 			'properties' => array(
-				'plugin_log_level' => array(
+				'plugin_log_level'                                               => array(
+					'type' => 'string',
+				),
+				'background_process_action_scheduler_queue_mode'                 => array(
+					'type' => 'string',
+				),
+				'background_process_action_scheduler_queue_mode_scheduled_delay' => array(
 					'type' => 'string',
 				),
 			),

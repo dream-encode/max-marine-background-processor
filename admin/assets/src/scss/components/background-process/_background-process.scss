@@ -1,0 +1,33 @@
+.background-process-info {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+
+	.row {
+		display: grid;
+		grid-template-columns: 150px max-content;
+		grid-auto-rows: 25px;
+		grid-template-areas:
+			"key value";
+		width: 100%;
+
+		.key {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
+			grid-area: key;
+			font-weight: 600;
+		}
+
+		.value {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: center;
+			grid-area: value;
+		}
+	}
+}

@@ -107,15 +107,17 @@ class Max_Marine_Background_Processor {
 		 */
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/abstracts/abstract-wc-logger.php';
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/log/class-max-marine-background-processor-wc-logger.php';
-		
+
 		/**
 		 * Action Scheduler
 		 */
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'libraries/action-scheduler/action-scheduler.php';
+
 		/**
 		 * Upgrader.
 		 */
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/upgrade/class-max-marine-background-processor-upgrader.php';
+
 		/**
 		 * REST API
 		 */
@@ -123,6 +125,7 @@ class Max_Marine_Background_Processor {
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/abstracts/abstract-rest-api.php';
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/abstracts/abstract-rest-controller.php';
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/rest-api/class-max-marine-background-processor-core-api.php';
+
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
 		 * core plugin.
@@ -150,13 +153,25 @@ class Max_Marine_Background_Processor {
 		 * side of the site.
 		 */
 		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'public/class-max-marine-background-processor-public.php';
+
 		Max_Marine_Background_Processor_Upgrader::init();
+
+		/**
+		 * Background processing.
+		 */
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/background-process/class-max-marine-background-processor-background-process-functions.php';
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/background-process/class-max-marine-background-processor-background-process-messages-functions.php';
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/background-process/class-max-marine-background-processor-background-process-runner.php';
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/background-process/class-max-marine-background-processor-background-processor-base.php';
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/background-process/class-max-marine-background-processor-dummy-processor.php';
+
 		/**
 		 * If this is a WP_CLI request, include the commands.
 		 */
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			include_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/cli/class-max-marine-background-processor-cli-commands.php';
 		}
+
 		$this->loader = new Max_Marine_Background_Processor_Loader();
 	}
 
@@ -183,10 +198,6 @@ class Max_Marine_Background_Processor {
 	 * @return void
 	 */
 	public function define_tables() {
-		if ( ! class_exists( 'Max_Marine_Background_Processor_Upgrader' ) ) {
-			return;
-		}
-
 		Max_Marine_Background_Processor_Upgrader::define_tables();
 	}
 
@@ -202,6 +213,9 @@ class Max_Marine_Background_Processor {
 		$plugin_admin = new Max_Marine_Background_Processor_Admin();
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
+		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
+
+		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_menu_pages' );
 	}
 
 	/**
@@ -215,12 +229,14 @@ class Max_Marine_Background_Processor {
 	private function define_public_hooks() {
 		$plugin_public = new Max_Marine_Background_Processor_Public();
 
-		$this->loader->add_action( 'example_function', $plugin_public, 'example_function' );
 		$this->loader->add_action( 'upgrader_process_complete', $plugin_public, 'upgrader_process_complete', 10, 2 );
-
 		$this->loader->add_action( 'max_marine_background_processor_process_plugin_upgrade', $plugin_public, 'process_plugin_upgrade', 10, 2 );
+
 		$this->loader->add_action( 'init', $plugin_public, 'rest_api_cors' );
 		$this->loader->add_action( 'init', $plugin_public, 'rest_init' );
+
+		$this->loader->add_action( 'rest_api_init', $plugin_public, 'register_plugin_settings' );
+		$this->loader->add_action( 'admin_init', $plugin_public, 'register_plugin_settings' );
 	}
 
 	/**
@@ -241,7 +257,7 @@ class Max_Marine_Background_Processor {
 	 */
 	private function define_cli_commands() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
-			\WP_CLI::add_command( 'mmbp', 'Max_Marine\Background_Processor\Core\CLI\Max_Marine_Background_Processor_CLI_Commands' );
+			\WP_CLI::add_command( 'mmbp', 'Max_Marine\Background_Processor\Core\CLI\Max_Marine_Background_Processor_CLI_Commands' ); // @phpstan-ignore-line
 		}
 	}
 

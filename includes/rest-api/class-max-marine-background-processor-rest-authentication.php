@@ -249,6 +249,16 @@ class Max_Marine_Background_Processor_REST_Authentication {
 	public static function check_woocommerce_shop_manager_permission() {
 		return current_user_can( 'manage_woocommerce' );
 	}
+
+	/**
+	 * Check user can do action.
+	 *
+	 * @since  1.0.0
+	 * @return bool
+	 */
+	public static function check_user_permission() {
+		return current_user_can( 'edit_posts' );
+	}
 }
 
 return new Max_Marine_Background_Processor_REST_Authentication();

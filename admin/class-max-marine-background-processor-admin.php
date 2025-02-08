@@ -58,7 +58,7 @@ class Max_Marine_Background_Processor_Admin {
 				wp_enqueue_style(
 					"max-marine-background-processor-admin-{$asset['name']}",
 					$asset_base_url . "assets/dist/css/admin-{$asset['name']}.min.css",
-					$asset_file['dependencies'],
+					max_marine_background_processor_get_style_asset_dependencies( $asset_file['dependencies'] ),
 					$asset_file['version'],
 					'all'
 				);
@@ -106,7 +106,7 @@ class Max_Marine_Background_Processor_Admin {
 				);
 
 				if ( ! empty( $asset['localization'] ) ) {
-					wp_localize_script( "max-marine-background-processor-admin-{$asset['name']}", 'MMBP', $asset['localization'] );
+					wp_localize_script( "max-marine-background-processor-admin-{$asset['name']}", 'MAX_MARINE_BACKGROUND_PROCESSOR', $asset['localization'] );
 				}
 
 				wp_enqueue_script( "max-marine-background-processor-admin-{$asset['name']}" );
@@ -115,7 +115,7 @@ class Max_Marine_Background_Processor_Admin {
 			}
 		}
 	}
-	
+
 	/**
 	 * Adds menu pages.
 	 *
@@ -124,13 +124,33 @@ class Max_Marine_Background_Processor_Admin {
 	 */
 	public function add_menu_pages() {
 		add_submenu_page(
-			'options-general.php',
+			'max-marine',
 			__( 'Max Marine - Background Processor', 'max-marine-background-processor' ),
-			__( 'Max Marine - Background Processor', 'max-marine-background-processor' ),
+			__( 'Background Processor', 'max-marine-background-processor' ),
 			'manage_options',
 			'max-marine-background-processor-settings',
 			array( $this, 'admin_settings_menu_callback' )
 		);
+
+		add_submenu_page(
+			'tools.php',
+			__( 'Max Marine - Background Processes', 'max-marine-background-processor' ),
+			__( 'Background Processes', 'max-marine-background-processor' ),
+			'manage_options',
+			'max-marine-background-processor',
+			array( $this, 'background_processes_menu_callback' ),
+			300
+		);
+	}
+
+	/**
+	 * Admin menu callback for the background processes page.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
+	public function background_processes_menu_callback() {
+		echo '<div id="max-marine-background-processor-background-processes-page"></div>';
 	}
 
 	/**

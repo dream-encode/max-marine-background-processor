@@ -152,6 +152,10 @@ const admin = {
 			'./admin/assets/src/js/admin-settings-page.js',
 			'./admin/assets/src/scss/admin-settings-page.scss'
 		],
+		'admin-background-processes-page': [
+			'./admin/assets/src/js/admin-background-processes-page.js',
+			'./admin/assets/src/scss/admin-background-processes-page.scss'
+		],
 	},
 	output: {
 		filename: 'js/[name].min.js',

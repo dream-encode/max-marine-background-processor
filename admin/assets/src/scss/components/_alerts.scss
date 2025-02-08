@@ -1,0 +1,69 @@
+#max-marine-background-processor-messages {
+	position: fixed;
+	bottom: 2rem;
+	right: 0;
+	width: 400px;
+
+	.dismiss-all {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: end;
+		margin-bottom: 6px;
+
+		button {
+			color: #444444;
+			background-color: #ffffff;
+			box-shadow: none;
+			font-weight: 500;
+
+			&:hover {
+				border-color: #000;
+			}
+		}
+	}
+
+	.background-process-alert {
+		padding: 3px 6px;
+
+		&.dismissing {
+			visibility: hidden;
+			opacity: 0;
+			transition: visibility 0s 0.75s, opacity 0.75s linear;
+		}
+
+		.dashicons-warning {
+			color: #cc1818;
+		}
+
+		.message-action-button {
+			background-color: #cc1818;
+			color: #fff;
+			border: #cc1818;
+    		box-shadow: none;
+		}
+
+		p {
+			color: #000000;
+		}
+
+		&.is-dismissible {
+			padding-right: 0;
+
+			.components-button.has-icon {
+				padding: 0;
+			}
+
+			.components-notice__dismiss {
+				svg {
+					width: 18px;
+					height: 18px;
+				}
+			}
+		}
+	}
+
+	.components-notice__action.components-button.is-link {
+		margin-left: 30px;
+	}
+}

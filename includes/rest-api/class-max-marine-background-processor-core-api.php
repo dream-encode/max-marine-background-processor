@@ -28,7 +28,8 @@ class Max_Marine_Background_Processor_Core_API extends Max_Marine_Background_Pro
 
 		$path_version = 'includes/rest-api' . DIRECTORY_SEPARATOR . $this->version . DIRECTORY_SEPARATOR . 'frontend';
 
-		include_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . $path_version . '/class-max-marine-background-processor-rest-user-controller.php';
+		include_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . $path_version . '/class-max-marine-background-processor-rest-background-processes-controller.php';
+		include_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . $path_version . '/class-max-marine-background-processor-rest-background-processes-messages-controller.php';
 	}
 
 	/**
@@ -39,9 +40,9 @@ class Max_Marine_Background_Processor_Core_API extends Max_Marine_Background_Pro
 	 */
 	public function rest_api_register_routes() {
 		$controllers = array(
-			'Max_Marine_Background_Processor_REST_User_Controller',
+			'Max_Marine_Background_Processor_REST_Background_Processes_Controller',
+			'Max_Marine_Background_Processor_REST_Background_Processes_Messages_Controller',
 		);
-
 		$this->controllers = $controllers;
 
 		parent::rest_api_register_routes();

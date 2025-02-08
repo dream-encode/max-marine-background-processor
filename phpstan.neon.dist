@@ -3,6 +3,7 @@ parameters:
     treatPhpDocTypesAsCertain: false
     checkMissingIterableValueType: false
     checkUninitializedProperties: false
+    checkGenericClassInNonGenericObjectType: false
     tmpDir: tests
     paths:
         - max-marine-background-processor.php
@@ -21,7 +22,3 @@ parameters:
         - %rootDir%/../../php-stubs/woocommerce-stubs/woocommerce-stubs.php
         - %rootDir%/../../php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
     ignoreErrors:
-        -
-            message: '#Variable \$[a-zA-Z0-9\\_]+ might not be defined#'
-            paths:
-                - admin/partials/*

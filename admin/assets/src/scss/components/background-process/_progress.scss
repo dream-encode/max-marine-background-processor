@@ -1,0 +1,175 @@
+@use 'sass:color';
+
+$waitingColor: #f1efef;
+$processingColor: #006FE6;
+$completeColor: #65C728;
+$progressBarBorderRadius: 5px;
+
+.progress-bar {
+	height: 20px;
+	width: 50%;
+	border-radius: $progressBarBorderRadius;
+
+	&::-webkit-progress-bar {
+		background: $waitingColor;
+		border-radius: $progressBarBorderRadius;
+	}
+
+	&.pending,
+	&.queued,
+	&.processing {
+		&::-webkit-progress-value {
+			animation-name: pulseWaiting;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+	}
+
+	&.pending,
+	&.queued {
+		&::-webkit-progress-value {
+			background: $waitingColor;
+			animation-name: pulseWaitingSkeleton;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+		&::-webkit-progress-bar {
+			animation-name: pulseWaitingSkeleton;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+	}
+
+	&.processing {
+		&::-webkit-progress-value {
+			background: $processingColor;
+			animation-name: pulseProcessing;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+		&::-webkit-progress-bar {
+			animation-name: pulseProcessing;
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+		}
+	}
+
+	&.complete {
+		&::-webkit-progress-value {
+			background: $completeColor;
+		}
+	}
+
+	&::-webkit-progress-value,
+	&[value]::-webkit-progress-value {
+		border-radius: $progressBarBorderRadius;
+		transition: all 1s ease;
+	}
+}
+
+@keyframes pulseWaiting {
+
+	0% {
+		background: $waitingColor;
+	}
+
+	25% {
+		background: $waitingColor;
+	}
+
+	50% {
+		background: $waitingColor;
+	}
+
+	75% {
+		background: color.adjust($waitingColor, $lightness: 50%);
+	}
+
+	50% {
+		background: $waitingColor;
+	}
+
+	100% {
+		background: $waitingColor;
+	}
+}
+
+@keyframes pulseWaitingSkeleton {
+
+	0% {
+		background-color: hsl( 200, 20%, 70% );
+	}
+
+	100% {
+		background-color: hsl( 200, 20%, 95% );
+	}
+}
+
+@keyframes pulseProcessing {
+
+	0% {
+		background: $processingColor;
+	}
+
+	25% {
+		background: $processingColor;
+	}
+
+	50% {
+		background: $processingColor;
+	}
+
+	75% {
+		background: color.adjust($processingColor, $lightness: 50%);
+	}
+
+	85% {
+		background: $processingColor;
+	}
+
+	100% {
+		background: $processingColor;
+	}
+}
+
+@keyframes pulseBar {
+
+	0% {
+		opacity: 1;
+	}
+
+	25% {
+		opacity: 1;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	75% {
+		opacity: 0.6;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes pulsate {
+
+	0% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5);
+	}
+
+	70% {
+		box-shadow: 0 0 0 25px rgba(255, 255, 255, 0);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+	}
+}

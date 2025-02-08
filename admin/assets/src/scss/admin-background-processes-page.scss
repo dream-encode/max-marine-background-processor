@@ -1,0 +1,179 @@
+.background-processes {
+	width: 100%;
+}
+
+#max-marine-background-processor-background-processes-page {
+	.components-placeholder {
+		background: #FFFFFF;
+		margin-top: 25px;
+		border: 1px solid #e2e4e7;
+		box-shadow: none;
+
+		.components-placeholder__fieldset {
+			justify-content: center;
+		}
+	}
+
+	.header {
+		padding: 20px 10px;
+		background-color: #ffffff;
+		box-shadow: 0 1px 0 rgba(213,213,213,0.5),0 1px 2px #eee;
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			margin: 0 auto;
+			max-width: 900px;
+
+			.version {
+				font-size: 12px;
+			}
+		}
+	}
+
+	.components-panel__row {
+		justify-content: center;
+	}
+
+	main {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 1720px;
+
+		@import './components/background-process/background-process';
+
+		.components-panel__body {
+			margin: 25px 0;
+			background: #fff;
+			border: 1px solid #e2e4e7;
+
+			&.background-process-status,
+			&.background-process-results {
+				.components-panel__row {
+					&.field-row {
+						padding: 0.25rem 0;
+					}
+				}
+			}
+
+			.components-panel__body-toggle {
+				border-bottom: 1px solid #d6e2ed;
+			}
+
+			.field-divider {
+				border-color:#cbd5e1;
+			}
+
+			.components-spinner {
+				margin: 0;
+				width: 20px;
+				height: 20px;
+			}
+
+			.panel-loader {
+				margin-top: 2.0rem;
+
+				.components-spinner {
+					width: 50px;
+					height: 50px;
+				}
+			}
+
+			.new-background-process,
+			.existing-background-processes {
+				min-height: 250px;
+			}
+
+			.existing-background-process-details {
+				.components-text {
+					line-height: 1.5;
+				}
+			}
+
+			.components-flex {
+				width: 100%;
+
+				.components-base-control {
+					width: 100%;
+				}
+			}
+
+			.components-select-control {
+				width: 600px;
+				width: 100%;
+
+				.components-input-control__container {
+					width: 100%;
+
+				}
+			}
+
+			@import './components/background-process/background-process-status';
+
+			.components-card {
+				width: 100%;
+
+				.components-card__body {
+					.components-flex {
+						&.or {
+							width: 75px;
+						}
+					}
+				}
+			}
+
+			.background-process-button-row {
+				height: 80px;
+			}
+
+			.components-panel__row {
+				margin: 0;
+				width: 100%;
+
+				&.field-row {
+					padding: 2rem 0;
+				}
+
+				&.buttons-row {
+					justify-content: center;
+				}
+			}
+		}
+
+		.info {
+			padding: 0 10px 10px;
+
+			h2 {
+				font-weight: 300;
+				margin-bottom: 10px;
+			}
+
+			p {
+				margin: 0 0 1.5em 0;
+			}
+
+			.settings-info-button-group {
+				display: flex;
+
+				.is-default {
+					padding: 2px 20px;
+					height: auto;
+					font-size: 14px;
+
+					&:first-child {
+						margin-right: 15px;
+					}
+				}
+			}
+		}
+
+		@import './components/background-process/results';
+	}
+
+	@import './components/general';
+	@import './components/alerts';
+}
+
+@import './components/modal';

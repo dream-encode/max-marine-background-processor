@@ -20,9 +20,11 @@ import {
 export const useSettings = () => {
     const { createSuccessNotice, createErrorNotice } = useDispatch( noticesStore )
 
-    const [ settingsLoaded, updateSettingsLoaded ] = useState( false )
-    const [ settingsSaving, updateSettingsSaving ] = useState( false )
-    const [ pluginLogLevel, updatePluginLogLevel ] = useState( 'off' )
+    const [ settingsLoaded, updateSettingsLoaded ]                                                                                   = useState( false )
+    const [ settingsSaving, updateSettingsSaving ]                                                                                   = useState( false )
+    const [ pluginLogLevel, updatePluginLogLevel ]                                                                                   = useState( 'off' )
+    const [ backgroundProcessActionSchedulerQueueMode, updateBackgroundProcessActionSchedulerQueueMode ]                             = useState( 'scheduled' )
+    const [ backgroundProcessActionSchedulerQueueModeScheduledDelay, updateBackgroundProcessActionSchedulerQueueModeScheduledDelay ] = useState( '5' )
 
 	useEffect( () => {
         load()
@@ -33,6 +35,8 @@ export const useSettings = () => {
 			path: '/wp/v2/settings'
 		} ).then( ( settings ) => {
             updatePluginLogLevel( settings.max_marine_background_processor_plugin_settings.plugin_log_level )
+            updateBackgroundProcessActionSchedulerQueueMode( settings.max_marine_background_processor_plugin_settings.background_process_action_scheduler_queue_mode )
+            updateBackgroundProcessActionSchedulerQueueModeScheduledDelay( settings.max_marine_background_processor_plugin_settings.background_process_action_scheduler_queue_mode_scheduled_delay )
 
 			updateSettingsLoaded( true )
         } )
@@ -47,11 +51,13 @@ export const useSettings = () => {
             data: {
                 max_marine_background_processor_plugin_settings: {
                     plugin_log_level: pluginLogLevel,
+                    background_process_action_scheduler_queue_mode: backgroundProcessActionSchedulerQueueMode,
+                    background_process_action_scheduler_queue_mode_scheduled_delay: backgroundProcessActionSchedulerQueueModeScheduledDelay,
                 },
             },
         } )
 
-        if ( ! saveResult || ! saveResult.success ) {
+        if ( ! saveResult ) {
             updateSettingsSaving( false )
 
             createErrorNotice(
@@ -77,6 +83,10 @@ export const useSettings = () => {
 		updateSettingsLoaded,
         pluginLogLevel,
         updatePluginLogLevel,
+        backgroundProcessActionSchedulerQueueMode,
+        updateBackgroundProcessActionSchedulerQueueMode,
+        backgroundProcessActionSchedulerQueueModeScheduledDelay,
+        updateBackgroundProcessActionSchedulerQueueModeScheduledDelay,
 		saveSettings,
         settingsSaving,
         updateSettingsSaving

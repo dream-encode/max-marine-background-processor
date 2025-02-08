@@ -7,6 +7,7 @@ import {
 	SelectControl,
 	Placeholder,
 	Spinner,
+	__experimentalNumberControl as NumberControl,
 	__experimentalHStack as HStack
 } from '@wordpress/components'
 
@@ -18,11 +19,28 @@ import { useSettings } from '../../hooks/useSettings'
 
 import Notices from '../Notices/Notices'
 
+import { LOG_LEVELS, BACKGROUND_PROCESS_ACTION_SCHEDULER_QUEUE_MODE } from '../../utils/constants'
+import { capitalizeFirstLetter } from '../../utils/helpers'
+
+const mappedLogLevels = LOG_LEVELS.map( ( level ) => ( {
+	label: capitalizeFirstLetter( level ),
+	value: level
+} ) )
+
+const mappedActionSchedulerQueueModes = BACKGROUND_PROCESS_ACTION_SCHEDULER_QUEUE_MODE.map( ( mode ) => ( {
+	label: capitalizeFirstLetter( mode ),
+	value: mode
+} ) )
+
 const AdminSettingsPage = () => {
 	const {
 		settingsLoaded,
         pluginLogLevel,
         updatePluginLogLevel,
+        backgroundProcessActionSchedulerQueueMode,
+        updateBackgroundProcessActionSchedulerQueueMode,
+        backgroundProcessActionSchedulerQueueModeScheduledDelay,
+        updateBackgroundProcessActionSchedulerQueueModeScheduledDelay,
 		saveSettings,
 		settingsSaving
     } = useSettings()
@@ -38,7 +56,7 @@ const AdminSettingsPage = () => {
 			<div className="settings-header">
 				<div className="settings-container">
 					<div className="settings-logo">
-						<h1>{ __( 'Max Marine - Background Processor', 'max-marine-background-processor' ) }</h1>
+						<h1>{ __( 'Max Marine - Background Processes', 'max-marine-background-processor' ) }</h1>
 					</div>
 				</div>
 			</div>
@@ -62,6 +80,29 @@ const AdminSettingsPage = () => {
 									__nextHasNoMarginBottom
 								/>
 							</PanelRow>
+						</PanelBody>
+						<PanelBody title={ __( 'Processing' ) }>
+							<PanelRow className="field-row">
+								<SelectControl
+									label={ __( 'Action Scheduler Queue Mode', 'max-marine-background-processor' ) }
+									value={ backgroundProcessActionSchedulerQueueMode || 'async' }
+									options={ mappedActionSchedulerQueueModes }
+									onChange={ updateBackgroundProcessActionSchedulerQueueMode }
+									__nextHasNoMarginBottom
+								/>
+							</PanelRow>
+							{ 'scheduled' === backgroundProcessActionSchedulerQueueMode && (
+								<PanelRow className="field-row">
+									<NumberControl
+										label={ __( 'Scheduled Mode Delay (in seconds)', 'max-marine-background-processor' ) }
+										value={ backgroundProcessActionSchedulerQueueModeScheduledDelay || '1' }
+										onChange={ updateBackgroundProcessActionSchedulerQueueModeScheduledDelay }
+										step="1"
+										min="1"
+										__nextHasNoMarginBottom
+									/>
+								</PanelRow>
+							) }
 						</PanelBody>
 						<HStack
 							alignment="center"

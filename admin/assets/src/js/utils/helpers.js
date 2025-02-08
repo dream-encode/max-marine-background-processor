@@ -1,9 +1,5 @@
-/* global MMBP, APP_VERSION */
+/* global MAX_MARINE_BACKGROUND_PROCESSOR, APP_VERSION */
 import { __ } from '@wordpress/i18n'
-
-import {
-	addQueryArgs
-} from '@wordpress/url'
 
 /**
  * Get the current app version from package.json.
@@ -13,6 +9,18 @@ import {
  */
 export const getAppVersion = () => {
 	return APP_VERSION
+}
+
+/**
+ * Get a label for a background processor.
+ *
+ * @since  1.0.0
+ * @param  string  backgroundProcessor   Background process type.
+ * @param  string  backgroundProcessors  All available background processors.
+ * @return string
+ */
+export const getBackgroundProcessorLabel = ( backgroundProcessor, backgroundProcessors ) => {
+	return backgroundProcessors.find( ( bp ) => bp.key === backgroundProcessor )?.label ?? __( 'N/A', 'max-marine-background-processor' )
 }
 
 /**
@@ -159,6 +167,75 @@ export const zeroPadNumber = ( num, places ) => {
 }
 
 /**
+ * Calculate an estimated time remaining, using Simple Moving Average(SMA).
+ *
+ * @since  1.0.0
+ * @param  array         times   Array of previous run times.
+ * @param  int           window  Subset of times to use.
+ * @param  Infinity|int  n       Number of loops.
+ * @return array
+ */
+export const calculateBackgroundProcessEstimatedTimeRemainingUsingSMA = ( times, window = 2, n = Infinity ) => {
+	if ( ! times || times.length < window ) {
+		return []
+	}
+
+	let index = window - 1
+	const length = times.length + 1
+
+	const simpleMovingAverages = []
+
+	let numberOfSMAsCalculated = 0
+
+	while ( ++index < length && numberOfSMAsCalculated++ < n ) {
+		const windowSlice = times.slice( index - window, index )
+		const sum = windowSlice.reduce( ( prev, curr ) => prev + curr, 0 )
+
+		simpleMovingAverages.push( sum / window )
+	}
+
+	return simpleMovingAverages
+}
+
+/**
+ * Calculate an estimated time remaining, using Exponential Moving Average(EMA).
+ *
+ * @since  1.0.0
+ * @param  array  batchRuns  Array of previous run times.
+ * @param  int    window     Subset of times to use.
+ * @return array
+ */
+export const calculateBackgroundProcessEstimatedTimeRemainingUsingEMA = ( batchRuns, window = 2 ) => {
+	if ( ! batchRuns || batchRuns.length < window ) {
+		return []
+	}
+
+	const times = batchRuns.map( ( run ) => run.total_time )
+
+	let index = window - 1
+	let previousEmaIndex = 0
+
+	const length = times.length
+	const smoothingFactor = 2 / ( window + 1 )
+
+	const exponentialMovingAverages = []
+
+	const [ sma ] = calculateBackgroundProcessEstimatedTimeRemainingUsingSMA( times, window, 1 )
+
+	exponentialMovingAverages.push( sma )
+
+	while ( ++index < length ) {
+		const value = times[ index ]
+		const previousEma = exponentialMovingAverages[ previousEmaIndex++ ]
+		const currentEma = ( value - previousEma ) * smoothingFactor + previousEma
+
+		exponentialMovingAverages.push( currentEma )
+	}
+
+	return exponentialMovingAverages
+}
+
+/**
  * Add a number of seconds to the current time.
  *
  * @since  1.0.0
@@ -171,15 +248,4 @@ export const addSecondsToCurrentTime = ( seconds ) => {
 	rawDate = new Date( rawDate.getTime() + Number( seconds * 1000 ) )
 
 	return rawDate.getTime() / 1000
-}
-
-/**
- * Get a URL to edit a post with a post ID.
- *
- * @since  1.0.0
- * @param  int  postID  Post ID.
- * @return string
- */
-export const wpEditPostLinkFromPostId = ( postID ) => {
-	return addQueryArgs( `${ MMBP.ADMIN_URL }post.php`, { post: postID, action: 'edit' } )
 }
