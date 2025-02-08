@@ -239,6 +239,23 @@ function max_marine_background_processor_convert_seconds_to_minutes_seconds( $se
 }
 
 /**
+ * Get a user by ID.
+ *
+ * @since  1.0.0
+ * @param  int   $user_id  User ID.
+ * @return string
+ */
+function max_marine_background_processor_get_user_name_by_id( $user_id ) {
+	$user = get_user_by( 'id', $user_id );
+
+	if ( ! $user instanceof WP_User ) {
+		return __( 'N/A', 'max-marine-background-processor' );
+	}
+
+	return $user->user_nicename;
+}
+
+/**
  * Output debug stuff.
  *
  * @since  1.0.0

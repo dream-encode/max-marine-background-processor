@@ -12,7 +12,8 @@
 namespace Max_Marine\Background_Processor\Admin;
 
 use WP_Screen;
-use Max_Marine\Background_Processor\Core\ListTable\Max_Marine_Background_Processor_List_Table;
+
+use Max_Marine\Background_Processor\Core\ListTable\Max_Marine_Background_Processor_Background_Processes_List_Table;
 
 /**
  * The admin-specific functionality of the plugin.
@@ -141,6 +142,16 @@ class Max_Marine_Background_Processor_Admin {
 			array( $this, 'background_processes_menu_callback' ),
 			300
 		);
+
+		add_submenu_page(
+			'tools.php',
+			__( 'Existing Background Processes', 'max-marine-background-processor' ),
+			__( 'Existing Background Processes', 'max-marine-background-processor' ),
+			'manage_options',
+			'max-marine-background-processes',
+			array( $this, 'background_processes_list_table' ),
+			301
+		);
 	}
 
 	/**
@@ -161,5 +172,31 @@ class Max_Marine_Background_Processor_Admin {
 	 */
 	public function admin_settings_menu_callback() {
 		echo '<div id="max-marine-background-processor-plugin-settings"></div>';
+	}
+
+	/**
+	 * Display a listing of background processes.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
+	public function background_processes_list_table() {
+		$option = 'per_page';
+
+		$args = array(
+			'label'   => __( 'Entries', 'max-marine-background-processor' ),
+			'default' => 50,
+			'option'  => 'entries_per_page',
+		);
+
+		add_screen_option( $option, $args );
+
+		require_once MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'includes/list-table/class-max-marine-background-processor-background-processes-list-table.php';
+
+		$list_table = new Max_Marine_Background_Processor_Background_Processes_List_Table();
+
+		$list_table->prepare_items();
+
+		include MAX_MARINE_BACKGROUND_PROCESSOR_PLUGIN_PATH . 'admin/partials/list-table/background-processes.php';
 	}
 }

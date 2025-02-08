@@ -9,6 +9,10 @@ const BackgroundProcessorLabel = ( { backgroundProcessor } ) => {
 
 	const { backgroundProcessors } = useBackgroundProcess()
 
+	if ( ! backgroundProcessors ) {
+		return __( 'N/A', 'max-marine-background-processor' )
+	}
+
 	return backgroundProcessors.find( ( bp ) => bp.key === backgroundProcessor )?.label ?? __( 'N/A', 'max-marine-background-processor' )
 }
 
